@@ -1,0 +1,17 @@
+{
+  "name": "logies-dataset-generator-service",
+  "version": "0.0.0",
+  "description": "Microservice to publish datasets for Toerisme Vlaanderen",
+  "dependencies": {
+    "@lblod/mu-auth-sudo": "^0.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redpencilio/logies-dataset-generator-service.git"
+  },
+  "author": "redpencil.io",
+  "license": "MIT"
+}
