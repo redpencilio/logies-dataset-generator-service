@@ -1,8 +1,6 @@
-// see https://github.com/mu-semtech/mu-javascript-template for more info
-
 import { app, query, errorHandler } from 'mu';
 
-app.get('/', function( req, res ) {
+app.get('/datasets/:id/subsets', function(req, res) {
   res.send('Hello mu-javascript-template');
 } );
 
