@@ -13,5 +13,10 @@
     "url": "git+https://github.com/redpencilio/logies-dataset-generator-service.git"
   },
   "author": "redpencil.io",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@lblod/mu-auth-sudo": "^0.2.0",
+    "date-fns": "^2.29.3",
+    "papaparse": "^5.4.0"
+  }
 }
