@@ -6,7 +6,7 @@ import { nlBE } from 'date-fns/locale';
 import Papa from 'papaparse';
 
 const PUBLIC_GRAPH = 'http://mu.semte.ch/graphs/public';
-const HOST_DOMAIN = 'https://linked.toerismevlaanderen.be';
+const HOST_DOMAIN = process.env.HOST_DOMAIN || 'https://linked.toerismevlaanderen.be';
 const BASE_URI = 'http://linked.toerismevlaanderen.be';
 const DCAT_CATALOG = 'http://linked.toerismevlaanderen.be/id/catalogs/c62b30ce-7486-4199-a177-def7e1772a53';
 
@@ -223,7 +223,7 @@ async function addCsvExport(task, ttlDataset) {
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>
     PREFIX nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>
-    PREFIX dbpedia: <http://dbpedia.org/resource/>
+    PREFIX dbpedia: <http://dbpedia.org/ontology/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX prov: <http://www.w3.org/ns/prov#>
 
