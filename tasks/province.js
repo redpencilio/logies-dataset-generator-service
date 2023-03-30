@@ -6,6 +6,7 @@ export default class ProvinceExport extends ExportTask {
     this.title = `Basisregister met het logiesaanbod voor ${label}`;
     this.datasetType = datasetType;
     this.fileName = `logies-${label.replace(/\s/g, '_')}`;
+    this.permalink = `/perm/datasets/${province}`;
     this.graphs = [
       'http://mu.semte.ch/graphs/public',
       'http://mu.semte.ch/graphs/mapped/public',

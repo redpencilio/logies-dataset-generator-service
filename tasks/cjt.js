@@ -4,6 +4,7 @@ export default class CjtExport extends ExportTask {
   title = 'Register van alle TVA verblijven in Vlaanderen voor CJT';
   datasetType = 'http://linked.toerismevlaanderen.be/id/concepts/e4369326-19cf-4028-aaea-ed1a57453261';
   fileName = 'cjt';
+  permalink = '/perm/datasets/cjt';
   graphs = [
     'http://mu.semte.ch/graphs/public',
     'http://mu.semte.ch/graphs/mapped/public',

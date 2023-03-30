@@ -1,5 +1,5 @@
-import { uuid, sparqlEscapeString, sparqlEscapeUri, sparqlEscapeInt, sparqlEscapeDateTime } from 'mu';
-import { querySudo as query, updateSudo as update } from '@lblod/mu-auth-sudo';
+import { uuid, query, sparqlEscapeString, sparqlEscapeUri, sparqlEscapeInt, sparqlEscapeDateTime } from 'mu';
+import { querySudo, updateSudo } from '@lblod/mu-auth-sudo';
 import { stat, writeFile } from 'node:fs/promises';
 import format from 'date-fns/format';
 import { nlBE } from 'date-fns/locale';
@@ -18,7 +18,7 @@ function camelToSnakeCase(str) {
 
 /* Fetches the dataset with the given id from the triplestore */
 async function fetchDataset(id) {
-  const result = await query(`
+  const result = await querySudo(`
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
 
@@ -33,6 +33,32 @@ async function fetchDataset(id) {
 
   if (result.results.bindings.length) {
     return result.results.bindings[0]['dataset'].value;
+  } else {
+    return null;
+  }
+}
+
+/* Find a file with the given permalink in the triplestore */
+async function findFileByUrl(url) {
+  const result = await query(`
+    PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    PREFIX schema: <http://schema.org/>
+    PREFIX nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>
+
+    SELECT ?uri ?id
+    WHERE {
+      ?uri a nfo:FileDataObject ;
+        mu:uuid ?id ;
+        schema:url ${sparqlEscapeUri(url)} .
+    } LIMIT 1
+  `);
+
+  if (result.results.bindings.length) {
+    const binding = result.results.bindings[0];
+    return {
+      uri: binding['uri'].value,
+      id: binding['id'].value,
+    };
   } else {
     return null;
   }
@@ -128,7 +154,7 @@ async function queryCsv(task) {
   do {
     console.log(`Fetch data for ${task.fileName}.csv (batch ${i + 1})`);
     const q = task.batchedQuery(BATCH_SIZE, BATCH_SIZE * i);
-    const queryResult = await query(q);
+    const queryResult = await querySudo(q);
     hasMoreResults = queryResult.results.bindings.length == BATCH_SIZE;
     for (const binding of queryResult.results.bindings) {
       const row = bindingToJson(binding);
@@ -136,7 +162,7 @@ async function queryCsv(task) {
       // Add multi-valued fields as separate columns
       for (const rowTask of task.perRowQueries) {
         const subQ = task.rowQuery(rowTask.query, row['product']);
-        const subQueryResult = await query(subQ);
+        const subQueryResult = await querySudo(subQ);
         let mapFn;
         if (rowTask.type == 'label-value') {
           mapFn = labelValueToJson;
@@ -181,6 +207,7 @@ async function addCsvExport(task, ttlDataset) {
   const physicalFileUuid = uuid();
   const physicalFile = `/share/${physicalFileUuid}.csv`;
   const physicalFileUri = physicalFile.replace('/share/', 'share://');
+  const permalink = `${HOST_DOMAIN}${task.permalink}`;
 
   const csv = await queryCsv(task);
   await writeFile(physicalFile, csv);
@@ -189,7 +216,7 @@ async function addCsvExport(task, ttlDataset) {
   const fileStats = await stat(physicalFile);
   const size = fileStats.size;
 
-  const result = await query(`
+  const result = await querySudo(`
       PREFIX dcat: <http://www.w3.org/ns/dcat#>
       PREFIX dct:  <http://purl.org/dc/terms/>
       PREFIX prov: <http://www.w3.org/ns/prov#>
@@ -213,11 +240,26 @@ async function addCsvExport(task, ttlDataset) {
     console.log(`No previous dataset of type <${task.datasetType}> found to link to.`);
   }
 
+  await querySudo(`
+    PREFIX nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>
+    PREFIX schema: <http://schema.org/>
+    DELETE {
+      GRAPH ?g {
+        ?s schema:url ${sparqlEscapeUri(permalink)} .
+      }
+    } WHERE {
+      GRAPH ?g {
+        ?s a nfo:FileDataObject ;
+          schema:url ${sparqlEscapeUri(permalink)} .
+      }
+    }
+  `);
+
   const graph = task.datasetGraph || PUBLIC_GRAPH;
   const previousDatasetStatement = previousDataset
         ? ` <${datasetUri}> prov:wasRevisionOf <${previousDataset}> . `
         : '';
-  await update(`
+  await updateSudo(`
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX dct: <http://purl.org/dc/terms/>
@@ -226,6 +268,7 @@ async function addCsvExport(task, ttlDataset) {
     PREFIX dbpedia: <http://dbpedia.org/ontology/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX prov: <http://www.w3.org/ns/prov#>
+    PREFIX schema: <http://schema.org/>
 
     INSERT DATA {
       GRAPH <${graph}> {
@@ -246,6 +289,7 @@ async function addCsvExport(task, ttlDataset) {
           dbpedia:fileExtension "csv" ;
           nfo:fileSize ${sparqlEscapeInt(size)} ;
           dcat:downloadURL <${HOST_DOMAIN}/files/${fileUuid}/download> ;
+          schema:url ${sparqlEscapeUri(permalink)} ;
           dct:created ${sparqlEscapeDateTime(now)} ;
           dct:modified ${sparqlEscapeDateTime(now)} ;
           dct:issued ${sparqlEscapeDateTime(now)} .
@@ -269,5 +313,7 @@ async function addCsvExport(task, ttlDataset) {
 
 export {
   fetchDataset,
-  addCsvExport
+  addCsvExport,
+  findFileByUrl,
+  HOST_DOMAIN
 }

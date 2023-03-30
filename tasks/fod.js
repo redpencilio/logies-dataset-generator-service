@@ -4,6 +4,7 @@ export default class FodExport extends ExportTask {
   title = `Basisregister met het capaciteitsaanbod voor de FOD Economie`;
   datasetType = 'http://linked.toerismevlaanderen.be/id/concepts/72035ee0-60bf-4de7-b467-4e8c54c13289';
   fileName = 'fod';
+  permalink = '/perm/datasets/fod';
   graphs = [
     'http://mu.semte.ch/graphs/public',
     'http://mu.semte.ch/graphs/mapped/public',

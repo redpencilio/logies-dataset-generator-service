@@ -1,9 +1,29 @@
 import bodyParser from 'body-parser';
 import { app, errorHandler } from 'mu';
 import tasks from './tasks';
-import { fetchDatasetByUri, fetchDataset, addCsvExport } from './support';
+import { fetchDataset, addCsvExport, findFileByUrl, HOST_DOMAIN } from './support';
 
 app.use(bodyParser.json({ type: function(req) { return /^application\/json/.test(req.get('content-type')); } }));
+
+app.get('/perm/*', async function(req, res) {
+  const url = `${HOST_DOMAIN}/perm/${req.params[0]}`;
+  console.log(`Trying to find file with permalink ${url}`);
+
+  try {
+    new URL(url); // ensure valid URL
+    const file = await findFileByUrl(url);
+    if (file) {
+      const downloadUrl = `/files/${file.id}/download`;
+      res.redirect(302, downloadUrl);
+    } else {
+      res.status(404).send();
+    }
+  } catch (e) {
+    console.log(`Invalid URL. Cannot find corresponding file for it`);
+    console.log(e);
+    res.status(400).send();
+  }
+});
 
 app.post('/delta', async function(req, res) {
   const lodgingTtlDatasets = req.body
