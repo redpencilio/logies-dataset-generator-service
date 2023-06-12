@@ -58,21 +58,28 @@ SELECT DISTINCT
 WHERE {
   ?product a logies:Logies .
 
-  OPTIONAL {
-    ?product logies:heeftRegistratie ?registration .
-    ?registration logies:registratieStatus ?registrationStatus .
-    FILTER (?registrationStatus != <http://linked.toerismevlaanderen.be/id/concepts/1ab08286-bc53-4a09-958d-e29b4acd76bf>)
-    ?registrationStatus skos:prefLabel ?registrationStatusLabel .
-    FILTER(LANG(?registrationStatusLabel) = "nl")
+  ?product logies:heeftRegistratie ?registration .
+  ?registration logies:registratieStatus ?registrationStatus ;
+    tvl:category ?categoryConcept .
+  FILTER (?registrationStatus IN (
+    <http://linked.toerismevlaanderen.be/id/concepts/96dbd436-b59b-4e6e-b080-26a83456dc4e>,
+    <http://linked.toerismevlaanderen.be/id/concepts/bb9d1b1b-05ea-4a98-bb54-87084c38da4e>,
+    <http://linked.toerismevlaanderen.be/id/concepts/ed624155-305e-4da3-83a0-e4c586ca7b81>
+  ))
+  FILTER(?categoryConcept NOT IN (
+    <http://linked.toerismevlaanderen.be/id/concepts/861b2cf2-81d9-4134-a15a-31f97487797b>,
+    <http://linked.toerismevlaanderen.be/id/concepts/b02b59e8-580f-4d97-a88b-8d2ce59ad3c9>
+  ))
 
-    OPTIONAL {
-      ?registration dct:type/skos:prefLabel ?type .
-      FILTER(LANG(?type) = "nl")
-    }
-    OPTIONAL {
-      ?registration tvl:category/skos:prefLabel ?category .
-      FILTER(LANG(?category) = "nl")
-    }
+  ?registrationStatus skos:prefLabel ?registrationStatusLabel .
+  FILTER(LANG(?registrationStatusLabel) = "nl")
+
+  ?categoryConcept skos:prefLabel ?category .
+  FILTER(LANG(?category) = "nl")
+
+  OPTIONAL {
+    ?registration dct:type/skos:prefLabel ?type .
+    FILTER(LANG(?type) = "nl")
   }
 
   OPTIONAL { ?product schema:name ?name . }
