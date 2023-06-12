@@ -34,6 +34,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT DISTINCT
 ?product
+?productId
 ?name
 ?altName
 ?type
@@ -80,6 +81,12 @@ WHERE {
   OPTIONAL {
     ?registration dct:type/skos:prefLabel ?type .
     FILTER(LANG(?type) = "nl")
+  }
+
+  OPTIONAL {
+    ?product adms:identifier ?tvlIdentifier .
+    ?tvlIdentifier adms:schemaAgency "Toerisme Vlaanderen" ;
+      skos:notation ?productId .
   }
 
   OPTIONAL { ?product schema:name ?name . }
