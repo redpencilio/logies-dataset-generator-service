@@ -1,6 +1,6 @@
 {
   "name": "logies-dataset-generator-service",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Microservice to publish datasets for Toerisme Vlaanderen",
   "dependencies": {
     "@lblod/mu-auth-sudo": "^0.6.1"
