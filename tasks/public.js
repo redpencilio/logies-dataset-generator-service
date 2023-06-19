@@ -1,7 +1,7 @@
 import ExportTask from './export-task';
 
 export default class PublicExport extends ExportTask {
-  title = 'Algemene en toegankelijkheidsinformatie over toeristische attracties in Vlaanderen';
+  title = 'Basisregister Vlaams Logiesaanbod';
   datasetType = 'http://linked.toerismevlaanderen.be/id/dataset-types/ca82a1e3-8a7c-438e-ba37-cf36063ba060';
   fileName = 'public';
   permalink = '/perm/datasets/public';
