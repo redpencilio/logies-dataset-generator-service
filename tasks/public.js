@@ -68,7 +68,6 @@ WHERE {
     <http://linked.toerismevlaanderen.be/id/concepts/ed624155-305e-4da3-83a0-e4c586ca7b81>
   ))
   FILTER(?categoryConcept NOT IN (
-    <http://linked.toerismevlaanderen.be/id/concepts/861b2cf2-81d9-4134-a15a-31f97487797b>,
     <http://linked.toerismevlaanderen.be/id/concepts/b02b59e8-580f-4d97-a88b-8d2ce59ad3c9>
   ))
 
