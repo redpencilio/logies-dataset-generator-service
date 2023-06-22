@@ -191,6 +191,7 @@ async function queryCsv(task) {
 
   const csv = Papa.unparse(rows, {
     quotes: true,
+    delimiter: ';',
     columns: [...columns].sort()
   });
 
