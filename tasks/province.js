@@ -215,7 +215,7 @@ WHERE {
       }
     }
   }
-} ORDER BY ?type ?name ?product LIMIT %LIMIT% OFFSET %OFFSET%`;
+} ORDER BY ?name ?product LIMIT %LIMIT% OFFSET %OFFSET%`;
     this.perRowQueries = [
       {
         type: 'multi-value',

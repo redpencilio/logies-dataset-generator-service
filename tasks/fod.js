@@ -207,7 +207,7 @@ WHERE {
     ?product dct:identifier ?fodLabel .
   }
 
-} ORDER BY ?type ?name ?product LIMIT %LIMIT% OFFSET %OFFSET%`;
+} ORDER BY ?name ?product LIMIT %LIMIT% OFFSET %OFFSET%`;
     perRowQueries = [
       {
         type: 'multi-value',
