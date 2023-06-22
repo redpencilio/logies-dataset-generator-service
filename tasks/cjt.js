@@ -11,6 +11,79 @@ export default class CjtExport extends ExportTask {
     'http://mu.semte.ch/graphs/mapped/private/tva'
   ];
   datasetGraph = 'http://mu.semte.ch/graphs/mapped/private/tva';
+  columnSpec = [
+    { source: 'product_id', value: 'business_product_id' },
+	  { source: 'name', value: 'name' },
+	  { source: 'alt_name', value: 'name_or_number' },
+	  { source: 'category', value: 'discriminator' },
+	  { source: 'product_type', value: 'product_type' },
+	  { source: 'street', value: 'street' },
+	  { source: 'house_number', value: 'house_number' },
+	  { source: 'box_number', value: 'box_number' },
+	  { source: 'postal_code', value: 'postal_code' },
+	  { source: 'city_name', value: 'city_name' },
+	  { source: 'promotional_region', value: 'promotional_region' },
+    { source: 'statistical_region', value: 'statistical_region' },
+	  { source: 'lat', value: 'lat' },
+	  { source: 'long', value: 'long' },
+	  { source: 'telephone', value: 'phone1' },
+	  { source: 'telephone_2', value: 'phone2' },
+	  { source: 'telephone_3', value: 'phone3' },
+	  { source: 'email', value: 'email' },
+	  { source: 'website', value: 'website' },
+	  { source: 'registration_status_label', value: 'status' },
+	  { source: 'registration_date', value: 'last_status_change_date' },
+    { source: '', value: 'notification_date' },
+    { source: '', value: 'acknowledgement_date' },
+	  { source: 'rating', value: 'comfort_class' },
+	  { source: 'number_of_units', value: 'number_of_units' },
+	  { source: 'maximum_capacity', value: 'maximum_capacity' },
+	  { source: 'fire_safety_certificate_experiation_date', value: 'fire_safety_certificate_expiration_date' },
+	  { source: 'fire_safety_advice', value: 'fire_safety_advice' },
+    { source: 'file_number', value: 'file_number' },
+    { source: '', value: 'tva_type' },
+    { source: '', value: 'tva_acknowledgement' },
+    { source: 'tva_capacity', value: 'tva_capacity' },
+    { source: 'tva_capacity_description', value: 'tva_capacity_description' },
+    { source: '', value: 'tva_acknowledgement_old' },
+ 	  { source: '', value: 'tva_capacity_old' },
+ 	  { source: 'tva_contact', value: 'tva_contact_contact_id' },
+ 	  { source: 'tva_contact_title', value: 'tva_contact_title' },
+ 	  { source: 'tva_contact_first_name', value: 'tva_contact_first_name' },
+ 	  { source: 'tva_contact_last_name', value: 'tva_contact_last_name' },
+ 	  { source: 'tva_contact_street', value: 'tva_contact_street' },
+ 	  { source: 'tva_contact_house_number', value: 'tva_contact_house_number' },
+ 	  { source: 'tva_contact_box_number', value: 'tva_contact_box_number' },
+ 	  { source: 'tva_contact_city_name', value: 'tva_contact_city_name' },
+ 	  { source: 'tva_contact_postal_code', value: 'tva_contact_postal_code' },
+ 	  { source: 'tva_contact_telephone', value: 'tva_contact_phone1' },
+ 	  { source: 'tva_contact_telephone_2', value: 'tva_contact_phone2' },
+ 	  { source: 'tva_contact_telephone_3', value: 'tva_contact_phone3' },
+ 	  { source: 'tva_contact_email', value: 'tva_contact_email' },
+ 	  { source: 'tva_contact_website', value: 'tva_contact_website' },
+ 	  { source: 'tva_organization', value: 'tva_organization_contact_id' },
+ 	  { source: 'tva_organisation_identifier', value: 'tva_organization_company_identification' },
+ 	  { source: 'tva_organisation_name', value: 'tva_organization_company_name' },
+ 	  { source: 'tva_organisation_street', value: 'tva_organization_street' },
+ 	  { source: 'tva_organisation_house_number', value: 'tva_organization_house_number' },
+ 	  { source: 'tva_organisation_box_number', value: 'tva_organization_box_number' },
+ 	  { source: 'tva_organisation_city_name', value: 'tva_organization_city_name' },
+ 	  { source: 'tva_organisation_postal_code', value: 'tva_organization_postal_code' },
+ 	  { source: 'tva_organisation_telephone', value: 'tva_organization_phone1' },
+ 	  { source: 'tva_organisation_telephone_2', value: 'tva_organization_phone2' },
+ 	  { source: 'tva_organisation_telephone_3', value: 'tva_organization_phone3' },
+ 	  { source: 'tva_organisation_email', value: 'tva_organization_email' },
+ 	  { source: 'tva_organisation_website', value: 'tva_organization_website' },
+ 	  { source: '', value: 'tva_acknowledgement_date' },
+ 	  { source: '', value: 'tva_principal_acknowledgement_date' },
+ 	  { source: '', value: 'tva_revoke_date' },
+ 	  { source: '', value: 'tva_suspension_date' },
+ 	  { source: '', value: 'tva_suspension_removal_date' },
+ 	  { source: '', value: 'deleted' },
+ 	  { source: 'green_key_label', value: 'green_key_labeled' },
+ 	  { source: 'accessibility_pref_label', value: 'accessibility_label' },
+ 	  { source: 'modified', value: 'changed_time' }
+  ];
   query = `
 PREFIX adms: <http://www.w3.org/ns/adms#>
 PREFIX adres: <https://data.vlaanderen.be/ns/adres#>
@@ -36,9 +109,9 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT DISTINCT
 ?product
+?productId
 ?name
 ?altName
-?type
 ?category
 ?registrationStatusLabel
 ?registrationDate
@@ -58,12 +131,14 @@ SELECT DISTINCT
 ?website
 ?rating
 ?numberOfUnits
-?capacity
+?maximumCapacity
 ?fireSafetyCertificateExperiationDate
 ?fireSafetyAdvice
 ?fileNumber
 ?greenKeyLabel
 ?accessibilityLabel
+?tvaCapacity
+?tvaCapacityDescription
 ?tvaContact
 ?tvaContactFirstName
 ?tvaContactLastName
@@ -96,18 +171,18 @@ WHERE {
         <http://linked.toerismevlaanderen.be/id/concepts/5a164cce-0c3c-469d-8910-707a456e0933>,
         <http://linked.toerismevlaanderen.be/id/concepts/4f269330-bc00-41e9-8928-1a454f38e760>
   ))
-  ?registrationStatus skos:prefLabel ?registrationStatusLabel .
-  FILTER(LANG(?registrationStatusLabel) = "nl")
-  OPTIONAL {
-    ?registration dct:type/skos:prefLabel ?type .
-    FILTER(LANG(?type) = "nl")
-   }
-  OPTIONAL {
-    ?registration tvl:category/skos:prefLabel ?category .
-    FILTER(LANG(?category) = "nl")
-  }
+  ?registrationStatus tvl:sqlKey ?registrationStatusLabel .
+
+  OPTIONAL { ?registration dct:type/tvl:sqlKey ?category .  }
   OPTIONAL { ?registration prov:qualifiedGeneration/prov:atTime ?registrationDate . }
   OPTIONAL { ?registration prov:qualifiedInvalidation/prov:atTime ?registrationInvalidationDate . }
+
+
+  OPTIONAL {
+    ?product adms:identifier ?tvlIdentifier .
+    ?tvlIdentifier adms:schemaAgency "Toerisme Vlaanderen" ;
+      skos:notation ?productId .
+  }
 
   OPTIONAL { ?product schema:name ?name . }
   OPTIONAL { ?product schema:alternativeName ?altName . }
@@ -131,8 +206,8 @@ WHERE {
     OPTIONAL { ?location wgs:long ?long . }
   }
 
-  OPTIONAL { ?product logies:behoortTotToeristischeRegio/skos:prefLabel ?promotionalRegion . }
-  OPTIONAL { ?product tvl:belongsToStatisticalRegion/skos:prefLabel ?statisticalRegion . }
+  OPTIONAL { ?product logies:behoortTotToeristischeRegio/tvl:sqlKey ?promotionalRegion . }
+  OPTIONAL { ?product tvl:belongsToStatisticalRegion/tvl:sqlKey ?statisticalRegion . }
 
   OPTIONAL {
     ?product schema:contactPoint ?contactPointEmail .
@@ -147,11 +222,12 @@ WHERE {
   }
 
   OPTIONAL {
-    ?product schema:starRating/schema:ratingValue ?rating .
+    ?product schema:starRating/schema:ratingValue ?ratingValue .
+    ?internalKey tvl:sqlKey ?rating ; tvl:linkedKey ?ratingValue .
   }
 
   OPTIONAL { ?product logies:aantalVerhuureenheden ?numberOfUnits . }
-  OPTIONAL { ?product logies:aantalSlaapplaatsen ?capacity . }
+  OPTIONAL { ?product logies:aantalSlaapplaatsen ?maximumCapacity . }
 
   OPTIONAL {
     ?permit a schema:GovernmentPermit ;
@@ -166,14 +242,26 @@ WHERE {
   }
 
   OPTIONAL {
-    ?product logies:heeftKwaliteitslabel ?greenKeyLabel .
-    ?greenKeyLabel skos:prefLabel "Green Key"@nl .
+    ?product logies:heeftKwaliteitslabel ?greenKey .
+    BIND(IF(BOUND(?greenKey), 1, 0) as ?greenKeyLabel)
   }
 
   OPTIONAL {
     ?product logies:heeftKwaliteitslabel ?accessibilityLabel .
     ?accessibilityLabel skos:prefLabel ?accessibilityPrefLabel .
     FILTER (CONTAINS(STR(?accessibilityPrefLabel), "Toegankelijkheidslabel"))
+  }
+
+  OPTIONAL {
+    ?product a schema:QuantitativeValue ;
+      schema:value ?tvaCapacity ;
+      schema:unitText "TVA capaciteit"@nl .
+  }
+
+  OPTIONAL {
+    ?product a schema:PropertyValue ;
+      schema:value ?tvaCapacityDescription ;
+      schema:unitText "TVA capaciteit"@nl .
   }
 
   OPTIONAL {

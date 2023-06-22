@@ -136,7 +136,7 @@ function joinValueToJson(bindings) {
         values.push(termToJson(binding[prop]));
       }
     });
-    return { [key]: values.join('; ') };
+    return { [key]: values.join(',') };
   } else {
     return {};
   }
@@ -182,17 +182,13 @@ async function queryCsv(task) {
     i++;
   } while (hasMoreResults)
 
-  const columns = new Set();
-  for (const row of rows) {
-    for (const key in row) {
-      columns.add(key);
-    }
-  }
-
-  const csv = Papa.unparse(rows, {
+  const data = {
+    fields: task.columnSpec.map((spec) => spec.value),
+    data: rows.map((row) => task.columnSpec.map((spec) => row[spec.source]))
+  };
+  const csv = Papa.unparse(data, {
     quotes: true,
     delimiter: ';',
-    columns: [...columns].sort()
   });
 
   return csv;
