@@ -169,7 +169,8 @@ WHERE {
   FILTER (?registrationStatus IN (
         <http://linked.toerismevlaanderen.be/id/concepts/37fd4d81-846b-448d-92d1-4dc1232540fd>,
         <http://linked.toerismevlaanderen.be/id/concepts/5a164cce-0c3c-469d-8910-707a456e0933>,
-        <http://linked.toerismevlaanderen.be/id/concepts/4f269330-bc00-41e9-8928-1a454f38e760>
+        <http://linked.toerismevlaanderen.be/id/concepts/4f269330-bc00-41e9-8928-1a454f38e760>,
+        <http://linked.toerismevlaanderen.be/id/concepts/f9305a29-0508-4e24-8615-f83bd4bf84a7>
   ))
   ?registrationStatus tvl:sqlKey ?registrationStatusLabel .
 
