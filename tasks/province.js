@@ -118,27 +118,25 @@ SELECT DISTINCT
 ?productId
 ?name
 ?altName
-?type
 ?category
-?registrationStatusLabel
 ?productType
-?modified
+?parent
 ?street
 ?houseNumber
 ?boxNumber
 ?postalCode
 ?cityName
-?lat
-?long
 ?promotionalRegion
 ?statisticalRegion
+?lat
+?long
 ?email
 ?website
+?registrationStatusLabel
+?registrationStatusChangeDate
 ?rating
 ?numberOfUnits
 ?maximumCapacity
-?greenKeyLabel
-?accessibilityPrefLabel
 ?agent
 ?agentFirstName
 ?agentLastName
@@ -165,6 +163,9 @@ SELECT DISTINCT
 ?productOwnerBoxNumber
 ?productOwnerPostalCode
 ?productOwnerCityName
+?greenKeyLabel
+?accessibilityPrefLabel
+?modified
 %FROM%
 WHERE {
   ?product a logies:Logies .
@@ -173,10 +174,10 @@ WHERE {
   ?registration logies:registratieStatus ?registrationStatus .
   ?registrationStatus tvl:sqlKey ?registrationStatusLabel .
   OPTIONAL {
-    ?registration dct:type/tvl:sqlKey ?type .
-   }
-  OPTIONAL {
     ?registration tvl:category/tvl:sqlKey ?category .
+  }
+  OPTIONAL {
+    ?registration prov:qualifiedGeneration/prov:atTime ?registrationStatusChangeDate .
   }
 
   OPTIONAL {

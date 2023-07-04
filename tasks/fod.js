@@ -108,10 +108,10 @@ SELECT DISTINCT
 ?productId
 ?name
 ?altName
-?type
 ?category
 ?registrationStatusLabel
 ?modified
+?productType
 ?street
 ?houseNumber
 ?boxNumber
@@ -162,9 +162,6 @@ WHERE {
   FILTER (?registrationStatus != <http://linked.toerismevlaanderen.be/id/concepts/1ab08286-bc53-4a09-958d-e29b4acd76bf>)
   ?registrationStatus tvl:sqlKey ?registrationStatusLabel .
   OPTIONAL {
-    ?registration dct:type/tvl:sqlKey ?type .
-   }
-  OPTIONAL {
     ?registration tvl:category ?categoryUri .
     ?categoryUri tvl:sqlKey ?category .
 
@@ -175,6 +172,7 @@ WHERE {
   }
 
   FILTER NOT EXISTS { ?parent logies:heeftAlternatieveUitbating ?product . }
+  BIND("BASE" as ?productType)
 
   OPTIONAL {
     ?product adms:identifier ?tvlIdentifier .
