@@ -1,4 +1,5 @@
 import ExportTask from './export-task';
+import { parseGmlX, parseGmlY } from './helpers';
 
 export default class PublicExport extends ExportTask {
   title = 'Basisregister Vlaams Logiesaanbod';
@@ -23,6 +24,8 @@ export default class PublicExport extends ExportTask {
 	  { source: 'city_name', value: 'city_name' },
 	  { source: 'lat', value: 'lat' },
 	  { source: 'long', value: 'long' },
+    { source: 'gml', value: 'x', map: parseGmlX },
+    { source: 'gml', value: 'y', map: parseGmlY },
 	  { source: 'promotional_region', value: 'promotional_region' },
 	  { source: 'modified', value: 'changed_time' },
 	  { source: 'registration_status_change_date', value: 'last_status_change_date' },
@@ -87,6 +90,7 @@ SELECT DISTINCT
 ?cityName
 ?lat
 ?long
+?gml
 ?promotionalRegion
 ?email
 ?website
@@ -154,6 +158,7 @@ WHERE {
     ?product logies:onthaalLocatie ?location .
     OPTIONAL { ?location wgs:lat ?lat . }
     OPTIONAL { ?location wgs:long ?long . }
+    OPTIONAL { ?location geosparql:asGML ?gml . }
   }
 
   OPTIONAL { ?product logies:behoortTotToeristischeRegio/tvl:sqlKey ?promotionalRegion . }

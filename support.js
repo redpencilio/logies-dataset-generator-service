@@ -184,7 +184,12 @@ async function queryCsv(task) {
 
   const data = {
     fields: task.columnSpec.map((spec) => spec.value),
-    data: rows.map((row) => task.columnSpec.map((spec) => row[spec.source]))
+    data: rows.map((row) => {
+      return task.columnSpec.map((spec) => {
+        const value = row[spec.source];
+        return spec.map ? spec.map(value) : value;
+      });
+    })
   };
   const csv = Papa.unparse(data, {
     quotes: true,
