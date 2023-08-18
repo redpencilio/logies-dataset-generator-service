@@ -168,8 +168,10 @@ async function queryCsv(task) {
           mapFn = labelValueToJson;
         } else if (rowTask.type == 'join-value') {
           mapFn = joinValueToJson;
-        } else { // rowTask.type == 'multi-value'
+        } else if (rowTask.type == 'multi-value') {
           mapFn = multiValueToJson;
+        } else { // just a regular subquery with additional values
+          mapFn = bindingToJson;
         }
         Object.assign(
           row,

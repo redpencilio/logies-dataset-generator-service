@@ -124,32 +124,6 @@ SELECT DISTINCT
 ?rating
 ?numberOfUnits
 ?capacity
-?agent
-?agentFirstName
-?agentLastName
-?agentTitle
-?agentCompanyName
-?agentIdentifier
-?agentEmail
-?agentWebsite
-?agentStreet
-?agentHouseNumber
-?agentBoxNumber
-?agentPostalCode
-?agentCityName
-?productOwner
-?productOwnerFirstName
-?productOwnerLastName
-?productOwnerTitle
-?productOwnerCompanyName
-?productOwnerIdentifier
-?productOwnerEmail
-?productOwnerWebsite
-?productOwnerStreet
-?productOwnerHouseNumber
-?productOwnerBoxNumber
-?productOwnerPostalCode
-?productOwnerCityName
 ?fodId
 ?fodLabel
 ?fodCategory
@@ -215,52 +189,6 @@ WHERE {
   OPTIONAL { ?product logies:aantalSlaapplaatsen ?capacity . }
 
   OPTIONAL {
-    ?product schema:offeredBy ?agent .
-    ?agent a org:Organisation .
-    OPTIONAL { ?agent skos:prefLabel ?agentCompanyName . }
-    OPTIONAL { ?agent adms:identifier/skos:notation ?agentIdentifier . }
-    OPTIONAL {
-      ?agent schema:contactPoint ?agentContactPoint .
-      OPTIONAL { ?agentContactPoint schema:email ?agentEmail . }
-      OPTIONAL { ?agentContactPoint foaf:page ?agentWebsite . }
-      OPTIONAL { ?agent foaf:firstName ?agentFirstName . }
-      OPTIONAL { ?agent foaf:givenName ?agentLastName . }
-      OPTIONAL { ?agent vcard:honorificPrefix ?agentTitle . }
-      OPTIONAL {
-        ?agentContactPoint locn:address ?agentAddress .
-        OPTIONAL { ?agentAddress locn:thoroughfare ?agentStreet . }
-        OPTIONAL { ?agentAddress adres:Adresvoorstelling.huisnummer ?agentHouseNumber . }
-        OPTIONAL { ?agentAddress adres:Adresvoorstelling.busnummer ?agentBoxNumber . }
-        OPTIONAL { ?agentAddress locn:postCode ?agentPostalCode . }
-        OPTIONAL { ?agentAddress adres:gemeentenaam ?agentCityName . }
-      }
-    }
-  }
-
-  OPTIONAL {
-    ?productOwner schema:owns ?product .
-    ?productOwner a org:Organisation .
-    OPTIONAL { ?productOwner skos:prefLabel ?productOwnerCompanyName . }
-    OPTIONAL { ?productOwner adms:identifier/skos:notation ?productOwnerIdentifier . }
-    OPTIONAL {
-      ?productOwner schema:contactPoint ?productOwnerContactPoint .
-      OPTIONAL { ?productOwnerContactPoint schema:email ?productOwnerEmail . }
-      OPTIONAL { ?productOwnerContactPoint foaf:page ?productOwnerWebsite . }
-      OPTIONAL { ?productOwner foaf:firstName ?productOwnerFirstName . }
-      OPTIONAL { ?productOwner foaf:givenName ?productOwnerLastName . }
-      OPTIONAL { ?productOwner vcard:honorificPrefix ?productOwnerTitle . }
-      OPTIONAL {
-        ?productOwnerContactPoint locn:address ?productOwnerAddress .
-        OPTIONAL { ?productOwnerAddress locn:thoroughfare ?productOwnerStreet . }
-        OPTIONAL { ?productOwnerAddress adres:Adresvoorstelling.huisnummer ?productOwnerHouseNumber . }
-        OPTIONAL { ?productOwnerAddress adres:Adresvoorstelling.busnummer ?productOwnerBoxNumber . }
-        OPTIONAL { ?productOwnerAddress locn:postCode ?productOwnerPostalCode . }
-        OPTIONAL { ?productOwnerAddress adres:gemeentenaam ?productOwnerCityName . }
-      }
-    }
-  }
-
-  OPTIONAL {
     ?product adms:identifier ?fodIdentifier .
     ?fodIdentifier a adms:Identifier ;
       adms:schemaAgency "Federale Overheidsdienst Economie" ;
@@ -273,6 +201,106 @@ WHERE {
 
 } ORDER BY ?name ?product LIMIT %LIMIT% OFFSET %OFFSET%`;
     perRowQueries = [
+      {
+        type: 'subquery',
+        query: `
+       PREFIX adms: <http://www.w3.org/ns/adms#>
+       PREFIX adres: <https://data.vlaanderen.be/ns/adres#>
+       PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+       PREFIX locn: <http://www.w3.org/ns/locn#>
+       PREFIX org: <http://www.w3.org/ns/org#>
+       PREFIX schema: <http://schema.org/>
+       PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+       PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+
+       SELECT DISTINCT
+       ?agent
+       ?agentFirstName
+       ?agentLastName
+       ?agentTitle
+       ?agentCompanyName
+       ?agentIdentifier
+       ?agentEmail
+       ?agentWebsite
+       ?agentStreet
+       ?agentHouseNumber
+       ?agentBoxNumber
+       ?agentPostalCode
+       ?agentCityName
+       %FROM%
+       WHERE {
+        <%s%> schema:offeredBy ?agent .
+        ?agent a org:Organisation .
+        OPTIONAL { ?agent skos:prefLabel ?agentCompanyName . }
+        OPTIONAL { ?agent adms:identifier/skos:notation ?agentIdentifier . }
+        OPTIONAL {
+          ?agent schema:contactPoint ?agentContactPoint .
+          OPTIONAL { ?agentContactPoint schema:email ?agentEmail . }
+          OPTIONAL { ?agentContactPoint foaf:page ?agentWebsite . }
+          OPTIONAL { ?agent foaf:firstName ?agentFirstName . }
+          OPTIONAL { ?agent foaf:givenName ?agentLastName . }
+          OPTIONAL { ?agent vcard:honorificPrefix ?agentTitle . }
+          OPTIONAL {
+            ?agentContactPoint locn:address ?agentAddress .
+            OPTIONAL { ?agentAddress locn:thoroughfare ?agentStreet . }
+            OPTIONAL { ?agentAddress adres:Adresvoorstelling.huisnummer ?agentHouseNumber . }
+            OPTIONAL { ?agentAddress adres:Adresvoorstelling.busnummer ?agentBoxNumber . }
+            OPTIONAL { ?agentAddress locn:postCode ?agentPostalCode . }
+            OPTIONAL { ?agentAddress adres:gemeentenaam ?agentCityName . }
+          }
+        }
+      }`
+      },
+      {
+        type: 'subquery',
+        query: `
+       PREFIX adms: <http://www.w3.org/ns/adms#>
+       PREFIX adres: <https://data.vlaanderen.be/ns/adres#>
+       PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+       PREFIX locn: <http://www.w3.org/ns/locn#>
+       PREFIX org: <http://www.w3.org/ns/org#>
+       PREFIX schema: <http://schema.org/>
+       PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+       PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+
+       SELECT DISTINCT
+       ?productOwner
+       ?productOwnerFirstName
+       ?productOwnerLastName
+       ?productOwnerTitle
+       ?productOwnerCompanyName
+       ?productOwnerIdentifier
+       ?productOwnerEmail
+       ?productOwnerWebsite
+       ?productOwnerStreet
+       ?productOwnerHouseNumber
+       ?productOwnerBoxNumber
+       ?productOwnerPostalCode
+       ?productOwnerCityName
+       %FROM%
+       WHERE {
+         ?productOwner schema:owns <%s%> .
+         ?productOwner a org:Organisation .
+         OPTIONAL { ?productOwner skos:prefLabel ?productOwnerCompanyName . }
+         OPTIONAL { ?productOwner adms:identifier/skos:notation ?productOwnerIdentifier . }
+         OPTIONAL {
+           ?productOwner schema:contactPoint ?productOwnerContactPoint .
+           OPTIONAL { ?productOwnerContactPoint schema:email ?productOwnerEmail . }
+           OPTIONAL { ?productOwnerContactPoint foaf:page ?productOwnerWebsite . }
+           OPTIONAL { ?productOwner foaf:firstName ?productOwnerFirstName . }
+           OPTIONAL { ?productOwner foaf:givenName ?productOwnerLastName . }
+           OPTIONAL { ?productOwner vcard:honorificPrefix ?productOwnerTitle . }
+           OPTIONAL {
+             ?productOwnerContactPoint locn:address ?productOwnerAddress .
+             OPTIONAL { ?productOwnerAddress locn:thoroughfare ?productOwnerStreet . }
+             OPTIONAL { ?productOwnerAddress adres:Adresvoorstelling.huisnummer ?productOwnerHouseNumber . }
+             OPTIONAL { ?productOwnerAddress adres:Adresvoorstelling.busnummer ?productOwnerBoxNumber . }
+             OPTIONAL { ?productOwnerAddress locn:postCode ?productOwnerPostalCode . }
+             OPTIONAL { ?productOwnerAddress adres:gemeentenaam ?productOwnerCityName . }
+           }
+         }
+       }`
+      },
       {
         type: 'multi-value',
         query: `PREFIX schema: <http://schema.org/>
