@@ -39,7 +39,7 @@ export default class PublicExport extends ExportTask {
 	  { source: 'number_of_units', value: 'number_of_units' },
 	  { source: 'maximum_capacity', value: 'maximum_capacity' },
     { source: 'normale_capaciteit', value: 'normal_capacity' },
-    { source: 'aantpal_plaatsen_voor_tenten', value: 'tent_capacity' },
+    { source: 'aantal_plaatsen_voor_tenten', value: 'tent_capacity' },
 	  { source: 'aantal_campingplaatsen_voor_kortverblijf', value: 'number_of_short_term_camping_spots' },
 	  { source: 'aantal_toeristische_campingplaatsen', value: 'number_of_touristic_camping_spots' },
 	  { source: 'aantal_staanplaatsen',value: 'number_of_camper_stands' },
