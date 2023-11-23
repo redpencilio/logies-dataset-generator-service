@@ -42,12 +42,13 @@ export default class PublicExport extends ExportTask {
     { source: 'aantal_plaatsen_voor_tenten', value: 'tent_capacity' },
 	  { source: 'aantal_campingplaatsen_voor_kortverblijf', value: 'number_of_short_term_camping_spots' },
 	  { source: 'aantal_toeristische_campingplaatsen', value: 'number_of_touristic_camping_spots' },
-	  { source: 'aantal_staanplaatsen',value: 'number_of_camper_stands' },
+	  { source: 'aantal_staanplaatsen', value: 'number_of_camper_stands' },
 	  { source: 'aantal_campingplaatsen', value: 'number_of_camping_spots' },
 	  { source: 'aantal_wooneenheden', value: 'number_of_residence_units' },
 	  { source: 'aantal_campingplaatsen_voor_lange_termijn', value: 'number_of_long_term_camping_spots' },
 	  { source: 'aantal_wooneenheden_te_huur', value: 'number_of_residence_units_for_rental' },
-	  { source: 'aantal_wandelaarshutten', value: 'number_of_hikers_huts' }
+	  { source: 'aantal_wandelaarshutten', value: 'number_of_hikers_huts' },
+ 	  { source: 'iconic_cycling_route_label', value: 'iconic_cycling_route_label' }
   ];
   query = `
 PREFIX adms: <http://www.w3.org/ns/adms#>
@@ -95,8 +96,7 @@ SELECT DISTINCT
 ?email
 ?website
 ?rating
-?greenKeyLabel
-?accessibilityLabel
+?iconicCyclingRouteLabel
 ?numberOfUnits
 ?maximumCapacity
 %FROM%
@@ -181,16 +181,9 @@ WHERE {
   }
 
   OPTIONAL {
-    ?product logies:heeftKwaliteitslabel ?greenKeyLabel .
-    ?greenKeyLabel skos:prefLabel "Green Key"@nl .
+    ?product logies:heeftKwaliteitslabel ?iconicCyclingRouteLabel .
+    ?iconicCyclingRouteLabel skos:prefLabel "Opgenomen in icoonfietsroutes"@nl .
   }
-
-  OPTIONAL {
-    ?product logies:heeftKwaliteitslabel ?accessibilityLabel .
-    ?accessibilityLabel skos:prefLabel ?accessibilityPrefLabel .
-    FILTER (CONTAINS(STR(?accessibilityPrefLabel), "Toegankelijkheidslabel"))
-  }
-
 } ORDER BY ?name ?product LIMIT %LIMIT% OFFSET %OFFSET%`;
   perRowQueries = [
     {
