@@ -1,6 +1,6 @@
 import { uuid, query, update, sparqlEscapeString, sparqlEscapeUri, sparqlEscapeInt, sparqlEscapeDateTime } from 'mu';
 import { stat, writeFile } from 'node:fs/promises';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { nlBE } from 'date-fns/locale';
 import Papa from 'papaparse';
 

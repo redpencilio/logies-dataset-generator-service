@@ -13,7 +13,7 @@
   "author": "redpencil.io",
   "license": "MIT",
   "dependencies": {
-    "date-fns": "^2.29.3",
+    "date-fns": "^4.1.0",
     "papaparse": "^5.4.0"
   }
 }
