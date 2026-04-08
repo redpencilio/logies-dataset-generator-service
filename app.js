@@ -3,8 +3,6 @@ import { app, errorHandler } from 'mu';
 import tasks from './tasks';
 import { fetchDataset, addCsvExport, findFileByUrl, HOST_DOMAIN } from './support';
 
-app.use(bodyParser.json({ type: function(req) { return /^application\/json/.test(req.get('content-type')); } }));
-
 app.get('/perm/*', async function(req, res) {
   const url = `${HOST_DOMAIN}/perm/${req.params[0]}`;
   console.log(`Trying to find file with permalink ${url}`);
@@ -25,7 +23,7 @@ app.get('/perm/*', async function(req, res) {
   }
 });
 
-app.post('/delta', async function(req, res) {
+app.post('/delta', bodyParser.json({ limit: '50mb' }), async function(req, res) {
   const lodgingTtlDatasets = req.body
         .map((changeset) => changeset.inserts)
         .filter((inserts) => inserts.length > 0)
