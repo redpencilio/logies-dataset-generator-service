@@ -1,5 +1,4 @@
-import { uuid, query, sparqlEscapeString, sparqlEscapeUri, sparqlEscapeInt, sparqlEscapeDateTime } from 'mu';
-import { querySudo, updateSudo } from '@lblod/mu-auth-sudo';
+import { uuid, query, update, sparqlEscapeString, sparqlEscapeUri, sparqlEscapeInt, sparqlEscapeDateTime } from 'mu';
 import { stat, writeFile } from 'node:fs/promises';
 import format from 'date-fns/format';
 import { nlBE } from 'date-fns/locale';
@@ -8,7 +7,6 @@ import Papa from 'papaparse';
 const PUBLIC_GRAPH = 'http://mu.semte.ch/graphs/public';
 const HOST_DOMAIN = process.env.HOST_DOMAIN || 'https://linked.toerismevlaanderen.be';
 const BASE_URI = 'http://linked.toerismevlaanderen.be';
-const DCAT_CATALOG = 'http://linked.toerismevlaanderen.be/id/catalogs/c62b30ce-7486-4199-a177-def7e1772a53';
 
 const BATCH_SIZE = 1000;
 
@@ -18,7 +16,7 @@ function camelToSnakeCase(str) {
 
 /* Fetches the dataset with the given id from the triplestore */
 async function fetchDataset(id) {
-  const result = await querySudo(`
+  const result = await query(`
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
 
@@ -29,7 +27,7 @@ async function fetchDataset(id) {
           mu:uuid ${sparqlEscapeString(id)} .
       }
     } LIMIT 1
-  `);
+  `, { sudo: true });
 
   if (result.results.bindings.length) {
     return result.results.bindings[0]['dataset'].value;
@@ -154,7 +152,7 @@ async function queryCsv(task) {
   do {
     console.log(`Fetch data for ${task.fileName}.csv (batch ${i + 1})`);
     const q = task.batchedQuery(BATCH_SIZE, BATCH_SIZE * i);
-    const queryResult = await querySudo(q);
+    const queryResult = await query(q, { sudo: true });
     hasMoreResults = queryResult.results.bindings.length == BATCH_SIZE;
     for (const binding of queryResult.results.bindings) {
       const row = bindingToJson(binding);
@@ -162,7 +160,7 @@ async function queryCsv(task) {
       // Add multi-valued fields as separate columns
       for (const rowTask of task.perRowQueries) {
         const subQ = task.rowQuery(rowTask.query, row['product']);
-        const subQueryResult = await querySudo(subQ);
+        const subQueryResult = await query(subQ, { sudo: true });
         let mapFn;
         if (rowTask.type == 'label-value') {
           mapFn = labelValueToJson;
@@ -220,7 +218,7 @@ async function addCsvExport(task, ttlDataset) {
   const fileStats = await stat(physicalFile);
   const size = fileStats.size;
 
-  const result = await querySudo(`
+  const result = await query(`
       PREFIX dcat: <http://www.w3.org/ns/dcat#>
       PREFIX dct:  <http://purl.org/dc/terms/>
       PREFIX prov: <http://www.w3.org/ns/prov#>
@@ -234,7 +232,7 @@ async function addCsvExport(task, ttlDataset) {
           ?distribution dct:format "text/csv" .
           FILTER NOT EXISTS { ?newerVersion prov:wasRevisionOf ?dataset . }
         }
-      } LIMIT 1`);
+      } LIMIT 1`, { sudo: true });
 
   let previousDataset;
   if (result.results.bindings.length) {
@@ -244,7 +242,7 @@ async function addCsvExport(task, ttlDataset) {
     console.log(`No previous dataset of type <${task.datasetType}> found to link to.`);
   }
 
-  await querySudo(`
+  await query(`
     PREFIX nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>
     PREFIX schema: <http://schema.org/>
     DELETE {
@@ -257,13 +255,13 @@ async function addCsvExport(task, ttlDataset) {
           schema:url ${sparqlEscapeUri(permalink)} .
       }
     }
-  `);
+  `, { sudo: true });
 
   const graph = task.datasetGraph || PUBLIC_GRAPH;
   const previousDatasetStatement = previousDataset
         ? ` <${datasetUri}> prov:wasRevisionOf <${previousDataset}> . `
         : '';
-  await updateSudo(`
+  await update(`
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX dct: <http://purl.org/dc/terms/>
@@ -307,7 +305,7 @@ async function addCsvExport(task, ttlDataset) {
           dct:created ${sparqlEscapeDateTime(now)} ;
           dct:modified ${sparqlEscapeDateTime(now)} .
       }
-    }`);
+    }`, { sudo: true });
 
   return {
     uri: fileUri,
