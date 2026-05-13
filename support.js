@@ -213,6 +213,7 @@ async function addCsvExport(task, ttlDataset) {
 
   const csv = await queryCsv(task);
   await writeFile(physicalFile, csv);
+  console.log(`CSV export written to ${physicalFile}`);
 
   const now = new Date();
   const fileStats = await stat(physicalFile);

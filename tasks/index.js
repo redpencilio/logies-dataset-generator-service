@@ -11,7 +11,7 @@ export default [
     'province-antwerp',
     'Toerisme Provincie Antwerpen',
     'http://linked.toerismevlaanderen.be/id/concepts/64519c70-d12f-4a11-9fb4-555da303c895',
-    `FILTER (STR(?province) = 'Antwerpen' || STR(?statisticalRegion) = 'Scheldeland')`
+    `FILTER (STR(?province) = 'Antwerpen' || STR(?statisticalRegion) = 'scheldeland')`
   ),
   new ProvinceExport(
     'province-flemish-brabant',
@@ -23,13 +23,13 @@ export default [
     'province-east-flanders',
     'Toerisme Provincie Oost-Vlaanderen',
     'http://linked.toerismevlaanderen.be/id/concepts/038e331f-caa9-45b9-937b-908c119aaef6',
-    `FILTER (STR(?province) = 'Oost-Vlaanderen' || STR(?statisticalRegion) = 'Scheldeland' || STR(?statisticalRegion) = 'Leiestreek')`
+    `FILTER (STR(?province) = 'Oost-Vlaanderen' || STR(?statisticalRegion) = 'scheldeland' || STR(?statisticalRegion) = 'leiestreek')`
   ),
   new ProvinceExport(
     'province-west-flanders',
     'Toerisme Provincie West-Vlaanderen',
     'http://linked.toerismevlaanderen.be/id/concepts/9b26a421-67df-444b-9d18-5d31fa1cc9bc',
-    `FILTER (STR(?province) = 'West-Vlaanderen' || STR(?statisticalRegion) = 'Leiestreek')`
+    `FILTER (STR(?province) = 'West-Vlaanderen' || STR(?statisticalRegion) = 'leiestreek')`
   ),
   new ProvinceExport(
     'province-limburg',
