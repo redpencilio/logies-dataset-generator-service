@@ -35,7 +35,7 @@ export default class FodExport extends ExportTask {
 	  { source: 'telephone_3', value: 'phone3' },
 	  { source: 'email', value: 'email' },
 	  { source: 'website', value: 'website' },
-	  { source: '', value: 'deleted' },
+	  { source: 'deleted', value: 'deleted' },
  	  { source: 'modified', value: 'changed_time' },
     { source: 'registration_status_label', value: 'status' },
     { source: 'registration_date', value: 'last_status_change_date' },
@@ -110,6 +110,7 @@ SELECT DISTINCT
 ?altName
 ?category
 ?registrationStatusLabel
+?deleted
 ?modified
 ?productType
 ?street
@@ -157,6 +158,11 @@ WHERE {
   OPTIONAL { ?product schema:name ?name . }
   OPTIONAL { ?product schema:alternativeName ?altName . }
   OPTIONAL { ?product dct:modified ?modified . }
+
+  OPTIONAL {
+    ?product prov:invalidatedAtTime ?invalidated .
+    BIND(IF(BOUND(?invalidated), 1, 0) as ?deleted)
+  }
 
   OPTIONAL {
     ?product logies:onthaalAdres ?address .
@@ -237,9 +243,9 @@ WHERE {
           ?agent schema:contactPoint ?agentContactPoint .
           OPTIONAL { ?agentContactPoint schema:email ?agentEmail . }
           OPTIONAL { ?agentContactPoint foaf:page ?agentWebsite . }
-          OPTIONAL { ?agent foaf:firstName ?agentFirstName . }
-          OPTIONAL { ?agent foaf:givenName ?agentLastName . }
-          OPTIONAL { ?agent vcard:honorificPrefix ?agentTitle . }
+          OPTIONAL { ?agentContactPoint foaf:firstName ?agentFirstName . }
+          OPTIONAL { ?agentContactPoint foaf:givenName ?agentLastName . }
+          OPTIONAL { ?agentContactPoint vcard:honorificPrefix ?agentTitle . }
           OPTIONAL {
             ?agentContactPoint locn:address ?agentAddress .
             OPTIONAL { ?agentAddress locn:thoroughfare ?agentStreet . }
@@ -287,9 +293,9 @@ WHERE {
            ?productOwner schema:contactPoint ?productOwnerContactPoint .
            OPTIONAL { ?productOwnerContactPoint schema:email ?productOwnerEmail . }
            OPTIONAL { ?productOwnerContactPoint foaf:page ?productOwnerWebsite . }
-           OPTIONAL { ?productOwner foaf:firstName ?productOwnerFirstName . }
-           OPTIONAL { ?productOwner foaf:givenName ?productOwnerLastName . }
-           OPTIONAL { ?productOwner vcard:honorificPrefix ?productOwnerTitle . }
+           OPTIONAL { ?productOwnerContactPoint foaf:firstName ?productOwnerFirstName . }
+           OPTIONAL { ?productOwnerContactPoint foaf:givenName ?productOwnerLastName . }
+           OPTIONAL { ?productOwnerContactPoint vcard:honorificPrefix ?productOwnerTitle . }
            OPTIONAL {
              ?productOwnerContactPoint locn:address ?productOwnerAddress .
              OPTIONAL { ?productOwnerAddress locn:thoroughfare ?productOwnerStreet . }

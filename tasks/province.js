@@ -85,7 +85,7 @@ export default class ProvinceExport extends ExportTask {
  	    { source: 'agent_telephone_3', value: 'agent_phone3' },
  	    { source: 'agent_email', value: 'agent_email' },
  	    { source: 'agent_website', value: 'agent_website' },
- 	    { source: '', value: 'deleted' },
+ 	    { source: 'deleted', value: 'deleted' },
  	    { source: 'green_key_label', value: 'green_key_labeled' },
  	    { source: 'accessibility_pref_label', value: 'accessibility_label' },
  	    { source: 'modified', value: 'changed_time' }
@@ -163,6 +163,7 @@ SELECT DISTINCT
 ?productOwnerBoxNumber
 ?productOwnerPostalCode
 ?productOwnerCityName
+?deleted
 ?greenKeyLabel
 ?accessibilityPrefLabel
 ?modified
@@ -195,16 +196,17 @@ WHERE {
 
   ?product tvl:belongsToStatisticalRegion/tvl:sqlKey ?statisticalRegion .
 
-  ?product logies:onthaalAdres ?address .
-  ?address locn:adminUnitL2 ?province .
-
   %PROVINCE_FILTER%
 
-  OPTIONAL { ?address locn:thoroughfare ?street . }
-  OPTIONAL { ?address adres:Adresvoorstelling.huisnummer ?houseNumber . }
-  OPTIONAL { ?address adres:Adresvoorstelling.busnummer ?boxNumber . }
-  OPTIONAL { ?address locn:postCode ?postalCode . }
-  OPTIONAL { ?address adres:gemeentenaam ?cityName . }
+  OPTIONAL {
+    ?product logies:onthaalAdres ?address .
+    ?address locn:adminUnitL2 ?province .
+    OPTIONAL { ?address locn:thoroughfare ?street . }
+    OPTIONAL { ?address adres:Adresvoorstelling.huisnummer ?houseNumber . }
+    OPTIONAL { ?address adres:Adresvoorstelling.busnummer ?boxNumber . }
+    OPTIONAL { ?address locn:postCode ?postalCode . }
+    OPTIONAL { ?address adres:gemeentenaam ?cityName . }
+  }
 
   OPTIONAL {
     ?product logies:onthaalLocatie ?location .
@@ -235,6 +237,11 @@ WHERE {
   OPTIONAL { ?product logies:aantalSlaapplaatsen ?maximumCapacity . }
 
   OPTIONAL {
+    ?product prov:invalidatedAtTime ?invalidated .
+    BIND(IF(BOUND(?invalidated), 1, 0) as ?deleted)
+  }
+
+  OPTIONAL {
     ?product logies:heeftKwaliteitslabel ?greenKey .
     BIND(IF(BOUND(?greenKey), 1, 0) as ?greenKeyLabel)
   }
@@ -254,9 +261,9 @@ WHERE {
       ?agent schema:contactPoint ?agentContactPoint .
       OPTIONAL { ?agentContactPoint schema:email ?agentEmail . }
       OPTIONAL { ?agentContactPoint foaf:page ?agentWebsite . }
-      OPTIONAL { ?agent foaf:firstName ?agentFirstName . }
-      OPTIONAL { ?agent foaf:givenName ?agentLastName . }
-      OPTIONAL { ?agent vcard:honorificPrefix ?agentTitle . }
+      OPTIONAL { ?agentContactPoint foaf:firstName ?agentFirstName . }
+      OPTIONAL { ?agentContactPoint foaf:givenName ?agentLastName . }
+      OPTIONAL { ?agentContactPoint vcard:honorificPrefix ?agentTitle . }
       OPTIONAL {
         ?agentContactPoint locn:address ?agentAddress .
         OPTIONAL { ?agentAddress locn:thoroughfare ?agentStreet . }
@@ -277,9 +284,9 @@ WHERE {
       ?productOwner schema:contactPoint ?productOwnerContactPoint .
       OPTIONAL { ?productOwnerContactPoint schema:email ?productOwnerEmail . }
       OPTIONAL { ?productOwnerContactPoint foaf:page ?productOwnerWebsite . }
-      OPTIONAL { ?productOwner foaf:firstName ?productOwnerFirstName . }
-      OPTIONAL { ?productOwner foaf:givenName ?productOwnerLastName . }
-      OPTIONAL { ?productOwner vcard:honorificPrefix ?productOwnerTitle . }
+      OPTIONAL { ?productOwnerContactPoint foaf:firstName ?productOwnerFirstName . }
+      OPTIONAL { ?productOwnerContactPoint foaf:givenName ?productOwnerLastName . }
+      OPTIONAL { ?productOwnerContactPoint vcard:honorificPrefix ?productOwnerTitle . }
       OPTIONAL {
         ?productOwnerContactPoint locn:address ?productOwnerAddress .
         OPTIONAL { ?productOwnerAddress locn:thoroughfare ?productOwnerStreet . }

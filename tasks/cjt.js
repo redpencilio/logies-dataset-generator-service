@@ -79,7 +79,7 @@ export default class CjtExport extends ExportTask {
  	  { source: '', value: 'tva_revoke_date' },
  	  { source: '', value: 'tva_suspension_date' },
  	  { source: '', value: 'tva_suspension_removal_date' },
- 	  { source: '', value: 'deleted' },
+ 	  { source: 'deleted', value: 'deleted' },
  	  { source: 'green_key_label', value: 'green_key_labeled' },
  	  { source: 'accessibility_pref_label', value: 'accessibility_label' },
  	  { source: 'modified', value: 'changed_time' }
@@ -135,6 +135,7 @@ SELECT DISTINCT
 ?fireSafetyCertificateExperiationDate
 ?fireSafetyAdvice
 ?fileNumber
+?deleted
 ?greenKeyLabel
 ?accessibilityLabel
 ?tvaCapacity
@@ -240,6 +241,11 @@ WHERE {
 
   OPTIONAL {
     ?product adms:identifier/skos:notation ?fileNumber .
+  }
+
+  OPTIONAL {
+    ?product prov:invalidatedAtTime ?invalidated .
+    BIND(IF(BOUND(?invalidated), 1, 0) as ?deleted)
   }
 
   OPTIONAL {
