@@ -225,7 +225,7 @@ WHERE {
        ?agentLastName
        ?agentTitle
        ?agentCompanyName
-       ?agentIdentifier
+       ?agentCompanyIdentification
        ?agentEmail
        ?agentWebsite
        ?agentStreet
@@ -238,7 +238,7 @@ WHERE {
         <%s%> schema:offeredBy ?agent .
         ?agent a org:Organisation .
         OPTIONAL { ?agent skos:prefLabel ?agentCompanyName . }
-        OPTIONAL { ?agent adms:identifier/skos:notation ?agentIdentifier . }
+        OPTIONAL { ?agent adms:identifier/skos:notation ?agentCompanyIdentification . }
         OPTIONAL {
           ?agent schema:contactPoint ?agentContactPoint .
           OPTIONAL { ?agentContactPoint schema:email ?agentEmail . }
@@ -275,7 +275,7 @@ WHERE {
        ?productOwnerLastName
        ?productOwnerTitle
        ?productOwnerCompanyName
-       ?productOwnerIdentifier
+       ?productOwnerCompanyIdentification
        ?productOwnerEmail
        ?productOwnerWebsite
        ?productOwnerStreet
@@ -288,7 +288,7 @@ WHERE {
          ?productOwner schema:owns <%s%> .
          ?productOwner a org:Organisation .
          OPTIONAL { ?productOwner skos:prefLabel ?productOwnerCompanyName . }
-         OPTIONAL { ?productOwner adms:identifier/skos:notation ?productOwnerIdentifier . }
+         OPTIONAL { ?productOwner adms:identifier/skos:notation ?productOwnerCompanyIdentification . }
          OPTIONAL {
            ?productOwner schema:contactPoint ?productOwnerContactPoint .
            OPTIONAL { ?productOwnerContactPoint schema:email ?productOwnerEmail . }
