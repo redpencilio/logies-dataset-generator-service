@@ -124,7 +124,7 @@ SELECT DISTINCT
 ?website
 ?rating
 ?numberOfUnits
-?capacity
+?maximumCapacity
 ?fodId
 ?fodLabel
 ?fodCategory
@@ -192,7 +192,7 @@ WHERE {
   }
 
   OPTIONAL { ?product logies:aantalVerhuureenheden ?numberOfUnits . }
-  OPTIONAL { ?product logies:aantalSlaapplaatsen ?capacity . }
+  OPTIONAL { ?product logies:aantalSlaapplaatsen ?maximumCapacity . }
 
   OPTIONAL {
     ?product adms:identifier ?fodIdentifier .
