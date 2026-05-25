@@ -39,7 +39,7 @@ export default class ProvinceExport extends ExportTask {
 	    { source: 'email', value: 'email' },
 	    { source: 'website', value: 'website' },
 	    { source: 'registration_status_label', value: 'status' },
-      { source: 'registration_date', value: 'last_status_change_date' },
+      { source: 'registration_status_change_date', value: 'last_status_change_date' },
 	    { source: 'rating', value: 'comfort_class' },
 	    { source: 'number_of_units', value: 'number_of_units' },
 	    { source: 'maximum_capacity', value: 'maximum_capacity' },

@@ -38,7 +38,7 @@ export default class FodExport extends ExportTask {
 	  { source: 'deleted', value: 'deleted' },
  	  { source: 'modified', value: 'changed_time' },
     { source: 'registration_status_label', value: 'status' },
-    { source: 'registration_date', value: 'last_status_change_date' },
+    { source: 'registration_status_change_date', value: 'last_status_change_date' },
 	  { source: 'rating', value: 'comfort_class' },
 	  { source: 'number_of_units', value: 'number_of_units' },
 	  { source: 'maximum_capacity', value: 'maximum_capacity' },
@@ -110,6 +110,7 @@ SELECT DISTINCT
 ?altName
 ?category
 ?registrationStatusLabel
+?registrationStatusChangeDate
 ?deleted
 ?modified
 ?productType
@@ -144,6 +145,9 @@ WHERE {
       ?categoryUri skos:relatedMatch/skos:notation ?fodCategory .
       FILTER(LANG(?fodCategory) = "nl")
     }
+  }
+  OPTIONAL {
+    ?registration prov:qualifiedGeneration/prov:atTime ?registrationStatusChangeDate .
   }
 
   FILTER NOT EXISTS { ?parent logies:heeftAlternatieveUitbating ?product . }
