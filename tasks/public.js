@@ -22,6 +22,7 @@ export default class PublicExport extends ExportTask {
 	  { source: 'box_number', value: 'box_number' },
 	  { source: 'postal_code', value: 'postal_code' },
 	  { source: 'city_name', value: 'city_name' },
+	  { source: 'main_city_name', value: 'main_city_name' },
 	  { source: 'lat', value: 'lat' },
 	  { source: 'long', value: 'long' },
     { source: 'gml', value: 'x', map: parseGmlX },
@@ -89,6 +90,7 @@ SELECT DISTINCT
 ?boxNumber
 ?postalCode
 ?cityName
+?mainCityName
 ?lat
 ?long
 ?gml
@@ -152,6 +154,7 @@ WHERE {
     OPTIONAL { ?address adres:Adresvoorstelling.busnummer ?boxNumber . }
     OPTIONAL { ?address locn:postCode ?postalCode . }
     OPTIONAL { ?address adres:gemeentenaam ?cityName . }
+    OPTIONAL { ?address locn:postName ?mainCityName . }
   }
 
   OPTIONAL {
