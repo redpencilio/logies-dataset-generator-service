@@ -252,7 +252,7 @@ WHERE {
           OPTIONAL { ?agentContactPoint foaf:page ?agentWebsite . }
           OPTIONAL { ?agentContactPoint foaf:firstName ?agentFirstName . }
           OPTIONAL { ?agentContactPoint foaf:givenName ?agentLastName . }
-          OPTIONAL { ?agentContactPoint vcard:honorificPrefix ?agentTitle . }
+          OPTIONAL { ?agentContactPoint vcard:honorific-prefix ?agentTitle . }
           OPTIONAL {
             ?agentContactPoint locn:address ?agentAddress .
             OPTIONAL { ?agentAddress locn:thoroughfare ?agentStreet . }
@@ -302,7 +302,7 @@ WHERE {
            OPTIONAL { ?productOwnerContactPoint foaf:page ?productOwnerWebsite . }
            OPTIONAL { ?productOwnerContactPoint foaf:firstName ?productOwnerFirstName . }
            OPTIONAL { ?productOwnerContactPoint foaf:givenName ?productOwnerLastName . }
-           OPTIONAL { ?productOwnerContactPoint vcard:honorificPrefix ?productOwnerTitle . }
+           OPTIONAL { ?productOwnerContactPoint vcard:honorific-prefix ?productOwnerTitle . }
            OPTIONAL {
              ?productOwnerContactPoint locn:address ?productOwnerAddress .
              OPTIONAL { ?productOwnerAddress locn:thoroughfare ?productOwnerStreet . }

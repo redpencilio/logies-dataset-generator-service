@@ -279,7 +279,7 @@ WHERE {
     ?tvaContact schema:contactType "TVA Contact" .
     OPTIONAL { ?tvaContact foaf:firstName ?tvaContactFirstName . }
     OPTIONAL { ?tvaContact foaf:givenName ?tvaContactLastName . }
-    OPTIONAL { ?tvaContact vcard:honorificPrefix ?tvaContactTitle . }
+    OPTIONAL { ?tvaContact vcard:honorific-prefix ?tvaContactTitle . }
     OPTIONAL { ?tvaContact schema:email ?tvaContactEmail . }
     OPTIONAL { ?tvaContact foaf:page ?tvaContactWebsite . }
     OPTIONAL {
