@@ -1,7 +1,7 @@
 {
   "name": "logies-dataset-generator-service",
   "type": "module",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Microservice to publish datasets for Toerisme Vlaanderen",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
