@@ -47,7 +47,7 @@ The conversion tasks are configured in `./app/tasks/index.js`. It's an array con
 #### Environment variables
 The following environment variables can be configured:
 * `HOST_DOMAIN` (default https://linked.toerismevlaanderen.be) : host domain used to construct file download URLs
-
+* `DCAT_CATALOG` (default http://linked.toerismevlaanderen.be/id/catalogs/c62b30ce-7486-4199-a177-def7e1772a53) : URI of the Toerisme Vlaanderen DCAT catalog
 
 ### API
 #### POST /delta

@@ -5,6 +5,7 @@ import { nlBE } from 'date-fns/locale';
 import Papa from 'papaparse';
 
 const PUBLIC_GRAPH = 'http://mu.semte.ch/graphs/public';
+const DCAT_CATALOG = process.env.DCAT_CATALOG || 'http://linked.toerismevlaanderen.be/id/catalogs/c62b30ce-7486-4199-a177-def7e1772a53';
 const HOST_DOMAIN = process.env.HOST_DOMAIN || 'https://linked.toerismevlaanderen.be';
 const BASE_URI = 'http://linked.toerismevlaanderen.be';
 
@@ -275,6 +276,7 @@ async function addCsvExport(task, ttlDataset) {
 
     INSERT DATA {
       GRAPH <${graph}> {
+        <${DCAT_CATALOG}> dcat:dataset <${datasetUri}> .
         <${datasetUri}> a dcat:Dataset ;
           mu:uuid ${sparqlEscapeString(datasetUuid)} ;
           dct:title ${sparqlEscapeString(task.title)} ;
